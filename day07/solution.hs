@@ -1,5 +1,4 @@
 import Data.Char
-import           Data.Set (Set)
 import qualified Data.Set as Set
 import Text.ParserCombinators.ReadP
 
