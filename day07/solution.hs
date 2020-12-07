@@ -12,8 +12,8 @@ parse = fst . head . readP_to_S all_lines
             <*> (char ' ' *> bags)
         line = (,) <$> (bags <* string " contain ") <*>
             (([] <$ string "no other bags")
-            +++ sepBy1 numberedBags (string ", ") <* char '.')
-        all_lines = sepBy line (char '\n') <* skipSpaces <* eof
+            +++ sepBy1 numberedBags (string ", ")) <* char '.' <* skipSpaces
+        all_lines = many line <* eof
 
 solve1 :: [(String, [(a, String)])] -> Int
 solve1 input = pred $ Set.size $ expand $ Set.singleton "shiny gold"
