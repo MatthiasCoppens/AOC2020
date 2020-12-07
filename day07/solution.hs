@@ -29,7 +29,7 @@ solve2 input = go "shiny gold"
     where
         go s =
             let next = concatMap snd $ filter ((== s) . fst) input
-            in  sum (map fst next) + sum (map (\(n, s) -> n * go s) next)
+            in  sum (map (\(n, s) -> n * (1 + go s)) next)
 
 main :: IO ()
 main = do
