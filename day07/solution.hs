@@ -25,7 +25,7 @@ solve1 input = pred $ Set.size $ expand $ Set.singleton "shiny gold"
             in  if set' == set then set else expand set'
 
 solve2 :: [(String, [(Int, String)])] -> Int
-solve2 input = go $ "shiny gold"
+solve2 input = go "shiny gold"
     where
         go s =
             let next = concatMap snd $ filter ((== s) . fst) input
