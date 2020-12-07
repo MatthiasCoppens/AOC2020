@@ -22,7 +22,7 @@ solve1 input = pred $ Set.size $ expand $ Set.singleton "shiny gold"
         expand set =
             let set' = Set.union set $ Set.fromList $ map fst $
                     filter (not . Set.disjoint set . snd) input'
-            in  if set' == set then set else expand set'
+            in  (if set' == set then id else expand) set'
 
 solve2 :: [(String, [(Int, String)])] -> Int
 solve2 input = go "shiny gold"
