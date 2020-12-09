@@ -7,11 +7,11 @@ solve1 (n:ns) (m:ms) | isSum (n:ns) m = solve1 (ns ++ [m]) ms
         isSum [] _ = False
 
 solve2 :: Int -> [Int] -> Int
-solve2 s = go []
+solve2 s = go 0 []
     where
-        go ns (m:ms) | sum ns <  s = go (ns ++ [m]) ms
-                     | sum ns == s = maximum ns + minimum ns
-        go (_:ns) ms = go ns ms
+        go t ns (m:ms) | t <  s = go (t + m) (ns ++ [m]) ms
+                       | t == s = maximum ns + minimum ns
+        go t (n:ns) ms = go (t - n) ns ms
 
 main :: IO ()
 main = do
