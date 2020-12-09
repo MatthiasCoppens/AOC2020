@@ -10,7 +10,7 @@ solve2 :: Int -> [Int] -> Int
 solve2 s = go 0 []
     where
         go t ns (m:ms) | t <  s = go (t + m) (ns ++ [m]) ms
-                       | t == s = maximum ns + minimum ns
+                       | t == s = (+) <$> maximum <*> minimum $ ns
         go t (n:ns) ms = go (t - n) ns ms
 
 main :: IO ()
