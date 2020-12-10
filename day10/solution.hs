@@ -3,10 +3,6 @@ import Data.List
 solve1 :: [Int] -> Int
 solve1 = ((*) <$> length . filter (== 1) <*> succ . length . filter (== 3))
         . (\x -> zipWith subtract x $ tail x)
-    where
-        maxDiff (n1:n2:ns) | n1 + 3 < n2 = [n1]
-        maxDiff (n:ns) = n : maxDiff ns
-        maxDiff [] = []
 
 solve2 :: [Int] -> Int
 solve2 = head . go
