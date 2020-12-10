@@ -2,7 +2,7 @@ import Data.List
 
 solve1 :: [Int] -> Int
 solve1 = ((*) <$> length . filter (== 1) <*> succ . length . filter (== 3))
-        . (\x -> zipWith subtract x $ tail x)
+        . (($) <$> zipWith subtract <*> tail)
 
 solve2 :: [Int] -> Int
 solve2 = head . go
