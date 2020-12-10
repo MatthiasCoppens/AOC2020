@@ -9,7 +9,7 @@ solve2 = head . go
     where
         go [] = []
         go (n:ns) = (:) <$> max 1 . sum <*> id
-            $ zipWith (flip const) (takeWhile (<= n+3) ns) $ go ns
+            $ zipWith const (go ns) $ takeWhile (<= n+3) ns
 
 main :: IO ()
 main = do
