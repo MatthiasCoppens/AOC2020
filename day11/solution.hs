@@ -17,12 +17,12 @@ next1, next2 :: Map (Int, Int) Seat -> Map (Int, Int) Seat
 
 next1 grid = Map.mapWithKey f grid
     where
-        neighbours (x, y) = length [() | n <- [(x-1, y-1), (x-1, y),
-            (x-1, y+1), (x, y-1), (x, y+1), (x+1, y-1), (x+1, y), (x+1, y+1)],
-            grid !? n == Just Occupied]
+        neighbours (x, y) = filter ((== Just Occupied) . (grid !?))
+            [(x-1, y-1), (x-1, y), (x-1, y+1), (x, y-1), (x, y+1), (x+1, y-1),
+            (x+1, y), (x+1, y+1)]
         f _ Floor = Floor
-        f c Empty    | neighbours c == 0 = Occupied
-        f c Occupied | neighbours c <  4 = Occupied
+        f c Empty    | null $          neighbours c = Occupied
+        f c Occupied | null $ drop 3 $ neighbours c = Occupied
         f _ _ = Empty
 
 next2 grid = Map.mapWithKey f grid
@@ -31,11 +31,11 @@ next2 grid = Map.mapWithKey f grid
             Just Floor    -> n (x+dx, y+dy) (dx, dy)
             Just Occupied -> True
             _             -> False
-        neighbours c = length [() | dc <- [(-1,-1), (-1,0), (-1,1), (0,-1),
-            (0,1), (1,-1), (1,0), (1,1)], n c dc]
+        neighbours c = filter (n c) [(-1,-1), (-1,0), (-1,1), (0,-1),
+            (0,1), (1,-1), (1,0), (1,1)]
         f _ Floor = Floor
-        f c Empty    | neighbours c == 0 = Occupied
-        f c Occupied | neighbours c <  5 = Occupied
+        f c Empty    | null $          neighbours c = Occupied
+        f c Occupied | null $ drop 4 $ neighbours c = Occupied
         f _ _ = Empty
 
 occupied :: Map a Seat -> Int
