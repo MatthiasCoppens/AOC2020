@@ -44,7 +44,7 @@ solve1 = go id Map.empty
 
 solve2 = go (:[]) Map.empty
     where
-        go f map (SetMem i n : rest) = go f (foldr (\i' map' -> Map.insert i' n map') map (f i)) rest
+        go f map (SetMem i n : rest) = go f (foldr (flip Map.insert n) map (f i)) rest
         go _ map code = case code of
             (SetMask s : rest) -> go (mask2 s) map rest
             _                  -> Map.foldr (+) 0 map
