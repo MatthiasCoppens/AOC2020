@@ -1,6 +1,5 @@
 import Data.Bits
 import Data.Char
-import           Data.Map.Strict   (Map)
 import qualified Data.Map.Strict as Map
 import Text.ParserCombinators.ReadP
 
