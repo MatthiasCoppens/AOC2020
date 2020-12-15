@@ -1,5 +1,5 @@
 import Data.Maybe
-import qualified Data.Map.Strict as M
+import qualified Data.IntMap.Strict as M
 
 input :: [Int]
 input = [13,0,10,12,1,5,8]
