@@ -26,14 +26,15 @@ parser = (,,)
         ticket = sepBy1 number (char ',')
 
 condense :: [(Int, Int)] -> [(Int, Int)]
-condense ((a,b):(c,d):rest)
-    | b < c     = (a, b) : condense ((c, d) : rest)
-    | otherwise = condense ((a, max b d) : rest)
-condense l = l
+condense = go . sort
+    where
+        go ((a,b):(c,d):rest) | b < c     = (a, b) : go ((c, d) : rest)
+                              | otherwise = go ((a, max b d) : rest)
+        go l = l
 
 solve1 :: [Field] -> [Ticket] -> Int
 solve1 fs ts =
-    sum $ filter (test $ condense $ sort $ concatMap ranges fs) $ concat ts
+    sum $ filter (test $ condense $ concatMap ranges fs) $ concat ts
     where
         test ((a,b):rest) x | x < a     = True
                             | x <= b    = False
@@ -51,7 +52,7 @@ solve2 fs t ts =
                                   | otherwise = test' rest (x:xs)
         test' _ [] = True
         test' [] _ = False
-        test rs = test' $ condense $ sort rs
+        test = test' . condense
         possibilities fs ts =
             [S.fromList [name f | f <- fs, test (ranges f) t] | t <- ts]
         run' ps [] = run $ reverse ps
