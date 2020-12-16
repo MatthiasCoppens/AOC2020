@@ -3,8 +3,6 @@ import Data.List
 import qualified Data.Set as S
 import Text.ParserCombinators.ReadP
 
-import Debug.Trace
-
 data Field = Field
     { name   :: String
     , ranges :: [(Int, Int)]
