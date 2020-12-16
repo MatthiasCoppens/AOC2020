@@ -40,6 +40,7 @@ solve1 fs ts =
                             | otherwise = test rest x
         test _ x = True
 
+solve2 :: [Field] -> Ticket -> [Ticket] -> Int
 solve2 fs t ts =
     let rs = condense $ sort $ concatMap ranges fs
         ts' = filter (test rs) ts
