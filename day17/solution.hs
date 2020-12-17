@@ -15,7 +15,7 @@ parse = go 0 0 S.empty
 
 neighbours :: Cube -> M.Map (Int, Int, Int) Int
 neighbours s = M.unionsWith (+)
-    [ M.mapKeys (\(x, y, z) -> (x+dx, y+dy, z+dz)) m
+    [ M.mapKeysMonotonic (\(x, y, z) -> (x+dx, y+dy, z+dz)) m
     | let m = M.fromSet (const 1) s
     , dx <- [-1, 0, 1]
     , dy <- [-1, 0, 1]
@@ -25,7 +25,7 @@ neighbours s = M.unionsWith (+)
 
 neighbours2 :: Cube2 -> M.Map (Int, Int, Int, Int) Int
 neighbours2 s = M.unionsWith (+)
-    [ M.mapKeys (\(x, y, z, t) -> (x+dx, y+dy, z+dz, t+dt)) m
+    [ M.mapKeysMonotonic (\(x, y, z, t) -> (x+dx, y+dy, z+dz, t+dt)) m
     | let m = M.fromSet (const 1) s
     , dx <- [-1, 0, 1]
     , dy <- [-1, 0, 1]
@@ -58,4 +58,4 @@ main :: IO ()
 main = do
     input <- parse <$> readFile "input"
     print . solve1 $ input
-    print . solve2 $ S.map (\(x, y, z) -> (x, y, z, 0)) input
+    print . solve2 $ S.mapMonotonic (\(x, y, z) -> (x, y, z, 0)) input
