@@ -8,10 +8,10 @@ parse :: String -> Cube
 parse = go 0 0 S.empty
     where
         go x y s (c:cs) = case c of
-            '#'  -> go (x+1) y (S.insert (x, y, 0) s) cs
-            '.'  -> go (x+1) y s cs
-            '\n' -> go 0 (y+1) s cs
-        go _ _ s [] = s
+            '#'  -> go (succ x)      y (S.insert (x, y, 0) s) cs
+            '.'  -> go (succ x)      y                     s  cs
+            '\n' -> go       0 (succ y)                    s  cs
+        go _ _ s "" = s
 
 neighbours :: Cube -> M.Map (Int, Int, Int) Int
 neighbours s = M.unionsWith (+)
@@ -39,14 +39,14 @@ next s =
     let ns = neighbours s
     in  S.union
             (M.keysSet $ M.filter (`elem` [2, 3]) (ns `M.restrictKeys` s))
-            (M.keysSet $ M.filter (== 3) (ns `M.withoutKeys` s))
+            (M.keysSet $ M.filter (==         3 ) (ns `M.withoutKeys`  s))
 
 next2 :: Cube2 -> Cube2
 next2 s =
     let ns = neighbours2 s
     in  S.union
             (M.keysSet $ M.filter (`elem` [2, 3]) (ns `M.restrictKeys` s))
-            (M.keysSet $ M.filter (== 3) (ns `M.withoutKeys` s))
+            (M.keysSet $ M.filter (==         3 ) (ns `M.withoutKeys`  s))
 
 solve1 :: Cube -> Int
 solve1 = S.size . (!! 6) . iterate next
