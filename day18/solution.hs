@@ -6,7 +6,7 @@ num, l2r, prec :: ReadP Int
 
 num = read <$> many1 (satisfy isDigit)
 
-l2r = foldl (flip ($)) <$> brack <*> (many ((\o r -> (`o` r)) <$> op <*> brack))
+l2r = foldl (flip ($)) <$> brack <*> (many (($) <$> op <*> brack))
     where
         op = ((+) <$ string " + ") +++ ((*) <$ string " * ")
         brack = (between (char '(') (char ')') l2r) +++ num
