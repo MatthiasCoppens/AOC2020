@@ -5,16 +5,16 @@ import Text.ParserCombinators.ReadP
 data Rule = Rule Int | Match Char | And Rule Rule | Or Rule Rule
 
 parse :: String -> (M.IntMap Rule, [String])
-parse = (\(m, s) -> (m, filter (not . null) $ lines s)) . last . readP_to_S rules
+parse = (\[(m, s)] -> (m, filter (not . null) $ lines s)) . readP_to_S rules 
     where
         num = read <$> many1 (satisfy isDigit)
         rule = Rule <$> num
         match = Match <$> (char '"' *> get <* char '"')
         and = And <$> rule <*> (char ' ' *> (rule +++ and))
         or = Or <$> (rule +++ and) <*> (string " | " *> rule +++ and)
-        rules = M.fromList <$> sepBy ((,)
-            <$> num
-            <*> (string ": " *> (rule +++ match +++ and +++ or))) (char '\n')
+        rules = M.fromList <$> (sepBy
+            ((,) <$> num <*> (string ": " *> (rule +++ match +++ and +++ or)))
+            (char '\n')) <* string "\n\n"
 
 run :: M.IntMap Rule -> [String] -> Int
 run m = length . filter (("" `elem`) . go (Rule 0))
