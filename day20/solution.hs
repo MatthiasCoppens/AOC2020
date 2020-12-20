@@ -1,10 +1,7 @@
-import Data.Bool (bool)
 import Data.Char (isDigit)
 import Data.List (tails, transpose)
 import Data.Maybe (listToMaybe)
 import Text.ParserCombinators.ReadP
-
-import Debug.Trace
 
 parse :: String -> [(Int, [[Bool]])]
 parse = fst . head . readP_to_S (sepBy tile (string "\n\n") <* skipSpaces <* eof)
