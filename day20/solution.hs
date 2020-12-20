@@ -74,7 +74,7 @@ monstersOrient :: [[Bool]] -> Int
 monstersOrient grid = maximum
     [ monstersVertic g'
     | g  <- [grid, reverse grid]
-    , g' <- take 8 $ iterate (transpose . reverse) g
+    , g' <- take 4 $ iterate (transpose . reverse) g
     ]
 
 sea :: [[Bool]] -> Int
