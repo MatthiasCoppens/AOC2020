@@ -13,12 +13,12 @@ parse = fst . head . readP_to_S (sepBy tile (string "\n\n") <* skipSpaces <* eof
                     <* string ":\n")
             <*> grid
 
-getEdges :: (Int, [[Bool]]) -> (Int, [[Bool]])
+getEdges :: (Int, [[a]]) -> (Int, [[a]])
 getEdges (n, bss) = (n,
     (++) <$> id <*> map reverse
     $ [head bss, last bss, map head bss, map last bss])
 
-solve1 :: [(Int, [[Bool]])] -> Int
+solve1 :: Eq a => [(Int, [[a]])] -> Int
 solve1 = product . take 4 . go . map getEdges
     where
         go ((n, edges):rest)
@@ -27,7 +27,7 @@ solve1 = product . take 4 . go . map getEdges
             | otherwise
                 =     go (rest ++ [(n, edges)])
 
-merge1 :: [[Bool]] -> [[Bool]] -> Maybe [[Bool]]
+merge1 :: Eq a => [[a]] -> [[a]] -> Maybe [[a]]
 merge1 g1 g2 = listToMaybe
     [ reverse (tail g1') ++ tail g2''
     | g1'  <- [g1, reverse g1]
@@ -36,7 +36,7 @@ merge1 g1 g2 = listToMaybe
     , head g1' == head g2''
     ]
 
-mergeCol :: [[[Bool]]] -> [[[Bool]]]
+mergeCol :: Eq a => [[[a]]] -> [[[a]]]
 mergeCol (grid:grids) = go [] grids
     where
         go gs' (g:gs) = case merge1 grid g of
@@ -44,10 +44,10 @@ mergeCol (grid:grids) = go [] grids
             Nothing -> go (g:gs') gs
         go gs [] = (reverse gs ++ [grid])
 
-noBorders :: [[Bool]] -> [[Bool]]
+noBorders :: [[a]] -> [[a]]
 noBorders = map (init . tail) . init . tail
 
-merge :: [[[Bool]]] -> [[Bool]]
+merge :: Eq a => [[[a]]] -> [[a]]
 merge [grid] = noBorders grid
 merge grids  = merge $ map transpose $ keepDoing mergeCol grids
     where
