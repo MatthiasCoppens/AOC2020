@@ -13,8 +13,8 @@ parse = fst . head . readP_to_S ((sepBy line (char '\n')) <* skipSpaces <* eof)
                     (sepBy1 word (string ", ")))
 
 mapify :: [(S.Set String, S.Set String)] -> M.Map String (S.Set String)
-mapify = foldl
-    (\m (ings,alls) -> S.foldr (\s -> M.insertWith S.intersection s ings) m alls)
+mapify = foldr
+    (\(ings,alls) -> flip (S.foldr (flip (M.insertWith S.intersection) ings)) alls)
     M.empty
 
 solve :: M.Map String (S.Set String) -> [(String, String)]
