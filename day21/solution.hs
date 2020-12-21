@@ -13,12 +13,9 @@ parse = fst . head . readP_to_S ((sepBy line (char '\n')) <* skipSpaces <* eof)
                     (sepBy1 word (string ", ")))
 
 mapify :: [(S.Set String, S.Set String)] -> M.Map String (S.Set String)
-mapify = go M.empty
-    where
-        go m ((ings,alls):rest) = go
-            (S.foldr (\s -> M.insertWith S.intersection s ings) m alls)
-            rest
-        go m [] = m
+mapify = foldl
+    (\m (ings,alls) -> S.foldr (\s -> M.insertWith S.intersection s ings) m alls)
+    M.empty
 
 solve :: M.Map String (S.Set String) -> [(String, String)]
 solve m = case M.lookupMin (M.filter (S.null . S.drop 1) m) of
