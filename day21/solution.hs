@@ -19,10 +19,10 @@ mapify = foldr
 
 solve :: M.Map String (S.Set String) -> [(String, String)]
 solve m = case M.lookupMin (M.filter (S.null . S.drop 1) m) of
+    Nothing          -> []
     Just (all, ings) ->
         let ing = S.findMin ings
         in  (all, ing) : solve (M.map (S.delete ing) $ M.delete all m)
-    Nothing          -> []
 
 solve1 :: [(String, String)] -> [(S.Set String, S.Set String)] -> Int
 solve1 y x = go $ S.fromList $ map snd y
