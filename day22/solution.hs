@@ -2,8 +2,6 @@ import Data.List (sort)
 import Data.List.Split (splitOn)
 import qualified Data.Set as S
 
-import Debug.Trace
-
 parse :: String -> ([Int], [Int])
 parse = (\[l,r] -> (l,r)) . map (map read . tail . lines) . splitOn "\n\n"
 
@@ -15,7 +13,7 @@ solve1 xs [] = sum . zipWith (*) [1..] . reverse $ xs
 solve1 [] ys = solve1 ys []
 
 solve2 :: [Int] -> [Int] -> Int
-solve2 xs ys = uncurry score . go xs $ ys
+solve2 xs ys = uncurry score $ go xs ys
     where
         score xs [] = sum . zipWith (*) [1..] . reverse $ xs
         score [] ys = score ys []
