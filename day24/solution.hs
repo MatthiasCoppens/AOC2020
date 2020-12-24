@@ -19,16 +19,13 @@ parse = foldr flip S.empty . map coord . lines
             "nw" -> (x-1, y+1)
 
 move :: Grid -> Grid
-move s =
-    let ns  = neighbours s
-        ns1 = ns `M.restrictKeys` s
-        ns2 = ns `M.withoutKeys`  s
-    in  M.keysSet $ M.union (M.filter (<= 2) ns1) (M.filter (== 2) ns2)
-    where
-        neighbours s = M.unionsWith (+)
-            [ M.fromSet (const 1) $ S.mapMonotonic (\(x, y) -> (x+dx, y+dy)) s
-            | (dx, dy) <- [(1, 0), (-1, 0), (1, -1), (0, -1), (0, 1), (-1, 1)]
-            ]
+move s = M.keysSet $ (M.union
+        <$> M.filter (<= 2) . (`M.restrictKeys` s)
+        <*> M.filter (== 2) . (`M.withoutKeys`  s)
+    ) $ M.unionsWith (+)
+        [ M.fromSet (const 1) $ S.mapMonotonic (\(x, y) -> (x+dx, y+dy)) s
+        | (dx, dy) <- [(1, 0), (-1, 0), (1, -1), (0, -1), (0, 1), (-1, 1)]
+        ]
 
 main :: IO ()
 main = do
