@@ -18,21 +18,20 @@ parse = foldr flip S.empty . map coord . lines
             "ne" -> (x,   y+1)
             "nw" -> (x-1, y+1)
 
-solve :: Int -> Grid -> Int
-solve n = S.size . (!! n) . iterate move
+move :: Grid -> Grid
+move s =
+    let ns  = neighbours s
+        ns1 = ns `M.restrictKeys` s
+        ns2 = ns `M.withoutKeys`  s
+    in  M.keysSet $ M.union (M.filter (<= 2) ns1) (M.filter (== 2) ns2)
     where
         neighbours s = M.unionsWith (+)
             [ M.fromSet (const 1) $ S.mapMonotonic (\(x, y) -> (x+dx, y+dy)) s
             | (dx, dy) <- [(1, 0), (-1, 0), (1, -1), (0, -1), (0, 1), (-1, 1)]
             ]
-        move s =
-            let ns  = neighbours s
-                ns1 = ns `M.restrictKeys` s
-                ns2 = ns `M.withoutKeys`  s
-            in  M.keysSet $ M.union (M.filter (<= 2) ns1) (M.filter (== 2) ns2)
 
 main :: IO ()
 main = do
-    input <- parse <$> readFile "input"
-    print . solve 0   $ input
-    print . solve 100 $ input
+    grids <- iterate move . parse <$> readFile "input"
+    print . S.size $ grids !! 0
+    print . S.size $ grids !! 100
