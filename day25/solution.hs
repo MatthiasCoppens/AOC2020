@@ -1,5 +1,3 @@
-import Data.List (findIndices)
-
 solve :: Int -> Int -> Int
 solve n1 n2 =
     let (l, n) = find [n1, n2] $ keys 7
